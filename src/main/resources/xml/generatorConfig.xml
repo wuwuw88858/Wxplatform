@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <context id="DB2Tables" targetRuntime="mybatis3">
+        <!--避免生成重复代码-->
+        <plugin type="common.utils.mybatisgenerator.OverIsMerablePlugin"/>
+
+        <!--代码生成注释-->
+        <commentGenerator>
+            <property name="suppressDate" value="true"/>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <!--数据库连接-->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost/studentunion"
+                        userId="root"
+                        password="CZJ4399"/>
+        <!--使用Generator中的类型转换器-->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!--生成实体类的位置-->
+        <javaModelGenerator targetPackage="com.wxplatform.pojo"
+                            targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+
+        <!--生成xml映射文件的位置
+            定义SQL映射生成器的属性
+            targetPackage:用于放置生成的SQL映射文件
+            targetProject:指定生成SQL映射的目标项目
+        -->
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+        
+        <!--生成mapper类的位置
+          定义JAVA客户端生成器的属性-->
+        <javaClientGenerator type="XMLMAPPER" 
+                             targetPackage="com.wxplatform.mapper" 
+                             targetProject="src/main/java">
+        </javaClientGenerator>
+        <!--生成表对应的类名
+            tableName:表名
+            domainObject:实体类名
+        -->
+        <!--<table tableName="memberinfo" domainObjectName="GroupMember"-->
+               <!--enableCountByExample="false"-->
+               <!--enableUpdateByExample="false"-->
+               <!--enableDeleteByExample="false"-->
+               <!--enableSelectByExample="true"-->
+               <!--selectByExampleQueryId="false">-->
+            <!--<property name="my.isgen.usekeys" value="true"/>-->
+            <!--<property name="useActualColumnNames" value="true"/>-->
+            <!--<generatedKey column="id" sqlStatement="JDBC"/>-->
+        <!--</table>-->
+        <!--部门-->
+        <!--<table tableName="departmentinfo" domainObjectName="Department"-->
+               <!--enableCountByExample="false"-->
+               <!--enableUpdateByExample="false"-->
+               <!--enableDeleteByExample="false"-->
+               <!--enableSelectByExample="true"-->
+               <!--selectByExampleQueryId="false">-->
+            <!--<property name="my.isgen.usekeys" value="true"/>-->
+            <!--<property name="useActualColumnNames" value="true"/>-->
+            <!--<generatedKey column="id" sqlStatement="JDBC"/>-->
+        <!--</table>-->
+        <!--组织-->
+        <!--<table tableName="tissusinfo" domainObjectName="Tissus"-->
+               <!--enableCountByExample="false"-->
+               <!--enableUpdateByExample="false"-->
+               <!--enableDeleteByExample="false"-->
+               <!--enableSelectByExample="true"-->
+               <!--selectByExampleQueryId="false">-->
+            <!--<property name="my.isgen.usekeys" value="true"/>-->
+            <!--<property name="useActualColumnNames" value="true"/>-->
+            <!--<generatedKey column="id" sqlStatement="JDBC"/>-->
+        <!--</table>-->
+            <!--政治面貌-->
+        <!--<table tableName="politicalstatusinfo" domainObjectName="PoliticalStatus"-->
+               <!--enableCountByExample="false"-->
+               <!--enableUpdateByExample="false"-->
+               <!--enableDeleteByExample="false"-->
+               <!--enableSelectByExample="true"-->
+               <!--selectByExampleQueryId="false">-->
+            <!--<property name="my.isgen.usekeys" value="true"/>-->
+            <!--<property name="useActualColumnNames" value="true"/>-->
+            <!--<generatedKey column="id" sqlStatement="JDBC"/>-->
+        <!--</table>-->
+
+        <!--周程-->
+        <table tableName="datetrip" domainObjectName="DateTrip"
+                           enableCountByExample="false"
+                           enableUpdateByExample="false"
+                           enableDeleteByExample="false"
+                           enableSelectByExample="true"
+                           selectByExampleQueryId="false">
+        <property name="my.isgen.usekeys" value="true"/>
+        <property name="useActualColumnNames" value="true"/>
+        <generatedKey column="id" sqlStatement="JDBC"/>
+    </table>
+
+    </context>
+</generatorConfiguration>

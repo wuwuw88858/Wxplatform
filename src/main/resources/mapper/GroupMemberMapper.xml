@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxplatform.mapper.GroupMemberMapper">
+  <resultMap id="BaseResultMap" type="com.wxplatform.pojo.GroupMember">
+    <id column="openid" jdbcType="VARCHAR" property="openid" />
+    <result column="memberid" jdbcType="VARCHAR" property="memberid" />
+    <result column="membername" jdbcType="VARCHAR" property="membername" />
+    <result column="politicalstatus" jdbcType="INTEGER" property="politicalstatus" />
+    <result column="tissus" jdbcType="INTEGER" property="tissus" />
+    <result column="department" jdbcType="INTEGER" property="department" />
+    <result column="departmentposition" jdbcType="INTEGER" property="departmentposition" />
+    <result column="telnumber" jdbcType="VARCHAR" property="telnumber" />
+    <result column="memberstatus" jdbcType="VARCHAR" property="memberstatus" />
+    <result column="departmentname" jdbcType="VARCHAR" property="departmentname"/>
+    <result column="politicalstatusname" jdbcType="VARCHAR" property="politicalstatusname"/>
+    <result column="tissusname" jdbcType="VARCHAR" property="tissusname"/>
+    <result column="memberpassword" jdbcType="VARCHAR" property="memberpassword" />
+
+
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    openid, memberid, membername, politicalstatus, tissus, department, departmentposition, 
+    telnumber, memberstatus, memberpassword
+  </sql>
+  <select id="selectByExample" parameterType="com.wxplatform.pojo.GroupMemberExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from memberinfo
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from memberinfo
+    where openid = #{openid,jdbcType=VARCHAR}
+  </select>
+
+  <!--多表关联查询根据openid查询memberinfo,关联department,tissus,politicalstatus查询出来-->
+  <select id="selectmemberinfoWithOtherByPrimaryKey" resultMap="BaseResultMap">
+    SELECT m.openid 'openid', m.memberid 'memberid', m.membername 'membername',
+    p.politicalstatusname 'politicalstatusname', t.tissusname 'tissusname',
+    d.departmentname 'departmentname', m.telnumber 'telnumber', m.memberstatus 'memberstatus'
+    from memberinfo m left join politicalstatusinfo p on m.politicalstatus=p.politicalstatusid
+    left join tissusinfo t on m.tissus=t.tissusid left join departmentinfo d on m.department=d.departmentid
+    where m.openid = #{openid, jdbcType=VARCHAR}
+  </select>
+
+  <!--查询数据是否存在-->
+  <select id="seletCount" resultType="java.lang.Integer">
+    select count(*) count from memberinfo where openid = #{openid, jdbcType=VARCHAR}
+  </select>
+
+  <!--管理层带分页的查询语句，获取总数的sql语句-->
+  <select id="selectMemberListWithPage"  resultMap="BaseResultMap">
+    SELECT m.openid 'openid', m.memberid 'memberid', m.membername 'membername',
+    p.politicalstatusname 'politicalstatusname', t.tissusname 'tissusname',
+    d.departmentname 'departmentname', m.telnumber 'telnumber', m.memberstatus 'memberstatus'
+    from memberinfo m left join politicalstatusinfo p on m.politicalstatus=p.politicalstatusid
+    left join tissusinfo t on m.tissus=t.tissusid left join departmentinfo d on m.department=d.departmentid
+  </select>
+
+  <!--部长仅查看自家小干的信息sql语句-->
+  <select id="selectMemberByDepartment"  resultMap="BaseResultMap">
+    SELECT m.openid 'openid', m.memberid 'memberid', m.membername 'membername',
+    p.politicalstatusname 'politicalstatusname', t.tissusname 'tissusname',
+    d.departmentname 'departmentname', m.telnumber 'telnumber', m.memberstatus 'memberstatus'
+    from memberinfo m left join politicalstatusinfo p on m.politicalstatus=p.politicalstatusid
+    left join tissusinfo t on m.tissus=t.tissusid left join departmentinfo d on m.department=d.departmentid
+    where m.department =#{department, jdbcType=INTEGER}
+
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from memberinfo
+    where openid = #{openid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.wxplatform.pojo.GroupMember">
+    insert into memberinfo (openid, memberid, membername, 
+      politicalstatus, tissus, department, 
+      departmentposition, telnumber, memberstatus, 
+      memberpassword)
+    values (#{openid,jdbcType=VARCHAR}, #{memberid,jdbcType=VARCHAR}, #{membername,jdbcType=VARCHAR}, 
+      #{politicalstatus,jdbcType=INTEGER}, #{tissus,jdbcType=INTEGER}, #{department,jdbcType=INTEGER}, 
+      #{departmentposition,jdbcType=INTEGER}, #{telnumber,jdbcType=VARCHAR}, #{memberstatus,jdbcType=VARCHAR}, 
+      #{memberpassword,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wxplatform.pojo.GroupMember">
+    insert into memberinfo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="openid != null">
+        openid,
+      </if>
+      <if test="memberid != null">
+        memberid,
+      </if>
+      <if test="membername != null">
+        membername,
+      </if>
+      <if test="politicalstatus != null">
+        politicalstatus,
+      </if>
+      <if test="tissus != null">
+        tissus,
+      </if>
+      <if test="department != null">
+        department,
+      </if>
+      <if test="departmentposition != null">
+        departmentposition,
+      </if>
+      <if test="telnumber != null">
+        telnumber,
+      </if>
+      <if test="memberstatus != null">
+        memberstatus,
+      </if>
+      <if test="memberpassword != null">
+        memberpassword,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="openid != null">
+        #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="memberid != null">
+        #{memberid,jdbcType=VARCHAR},
+      </if>
+      <if test="membername != null">
+        #{membername,jdbcType=VARCHAR},
+      </if>
+      <if test="politicalstatus != null">
+        #{politicalstatus,jdbcType=INTEGER},
+      </if>
+      <if test="tissus != null">
+        #{tissus,jdbcType=INTEGER},
+      </if>
+      <if test="department != null">
+        #{department,jdbcType=INTEGER},
+      </if>
+      <if test="departmentposition != null">
+        #{departmentposition,jdbcType=INTEGER},
+      </if>
+      <if test="telnumber != null">
+        #{telnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="memberstatus != null">
+        #{memberstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="memberpassword != null">
+        #{memberpassword,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wxplatform.pojo.GroupMember">
+    update memberinfo
+    <set>
+      <if test="memberid != null">
+        memberid = #{memberid,jdbcType=VARCHAR},
+      </if>
+      <if test="membername != null">
+        membername = #{membername,jdbcType=VARCHAR},
+      </if>
+      <if test="politicalstatus != null">
+        politicalstatus = #{politicalstatus,jdbcType=INTEGER},
+      </if>
+      <if test="tissus != null">
+        tissus = #{tissus,jdbcType=INTEGER},
+      </if>
+      <if test="department != null">
+        department = #{department,jdbcType=INTEGER},
+      </if>
+      <if test="departmentposition != null">
+        departmentposition = #{departmentposition,jdbcType=INTEGER},
+      </if>
+      <if test="telnumber != null">
+        telnumber = #{telnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="memberstatus != null">
+        memberstatus = #{memberstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="memberpassword != null">
+        memberpassword = #{memberpassword,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where openid = #{openid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wxplatform.pojo.GroupMember">
+    update memberinfo
+    set memberid = #{memberid,jdbcType=VARCHAR},
+      membername = #{membername,jdbcType=VARCHAR},
+      politicalstatus = #{politicalstatus,jdbcType=INTEGER},
+      tissus = #{tissus,jdbcType=INTEGER},
+      department = #{department,jdbcType=INTEGER},
+      departmentposition = #{departmentposition,jdbcType=INTEGER},
+      telnumber = #{telnumber,jdbcType=VARCHAR},
+      memberstatus = #{memberstatus,jdbcType=VARCHAR},
+      memberpassword = #{memberpassword,jdbcType=VARCHAR}
+    where openid = #{openid,jdbcType=VARCHAR}
+  </update>
+</mapper>

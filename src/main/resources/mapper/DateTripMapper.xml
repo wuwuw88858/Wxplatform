@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxplatform.mapper.DateTripMapper">
+  <resultMap id="BaseResultMap" type="com.wxplatform.pojo.DateTrip">
+    <id column="datetripid" jdbcType="VARCHAR" property="datetripid" />
+    <result column="date" jdbcType="VARCHAR" property="date" />
+    <result column="time" jdbcType="VARCHAR" property="time" />
+    <result column="week" jdbcType="INTEGER" property="week" />
+    <result column="xqday" jdbcType="VARCHAR" property="xqday" />
+    <result column="datetripcontent" jdbcType="VARCHAR" property="datetripcontent" />
+    <result column="participants" jdbcType="VARCHAR" property="participants" />
+    <result column="hostdepartment" jdbcType="VARCHAR" property="hostdepartment" />
+    <result column="place" jdbcType="VARCHAR" property="place" />
+    <result column="editor" jdbcType="VARCHAR" property="editor" />
+    <result column="tripstatus" jdbcType="VARCHAR" property="tripstatus" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    datetripid, date, time, week, xqday, datetripcontent, participants, hostdepartment, 
+    place, editor, tripstatus
+  </sql>
+  <select id="selectByExample" parameterType="com.wxplatform.pojo.DateTripExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from datetrip
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from datetrip
+    where datetripid = #{datetripid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from datetrip
+    where datetripid = #{datetripid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.wxplatform.pojo.DateTrip">
+    insert into datetrip (datetripid, date, time, 
+      week, xqday, datetripcontent, 
+      participants, hostdepartment, place, 
+      editor, tripstatus)
+    values (#{datetripid,jdbcType=VARCHAR}, #{date,jdbcType=VARCHAR}, #{time,jdbcType=VARCHAR}, 
+      #{week,jdbcType=INTEGER}, #{xqday,jdbcType=VARCHAR}, #{datetripcontent,jdbcType=VARCHAR}, 
+      #{participants,jdbcType=VARCHAR}, #{hostdepartment,jdbcType=VARCHAR}, #{place,jdbcType=VARCHAR}, 
+      #{editor,jdbcType=VARCHAR}, #{tripstatus,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wxplatform.pojo.DateTrip">
+    insert into datetrip
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="datetripid != null">
+        datetripid,
+      </if>
+      <if test="date != null">
+        date,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+      <if test="week != null">
+        week,
+      </if>
+      <if test="xqday != null">
+        xqday,
+      </if>
+      <if test="datetripcontent != null">
+        datetripcontent,
+      </if>
+      <if test="participants != null">
+        participants,
+      </if>
+      <if test="hostdepartment != null">
+        hostdepartment,
+      </if>
+      <if test="place != null">
+        place,
+      </if>
+      <if test="editor != null">
+        editor,
+      </if>
+      <if test="tripstatus != null">
+        tripstatus,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="datetripid != null">
+        #{datetripid,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null">
+        #{date,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=VARCHAR},
+      </if>
+      <if test="week != null">
+        #{week,jdbcType=INTEGER},
+      </if>
+      <if test="xqday != null">
+        #{xqday,jdbcType=VARCHAR},
+      </if>
+      <if test="datetripcontent != null">
+        #{datetripcontent,jdbcType=VARCHAR},
+      </if>
+      <if test="participants != null">
+        #{participants,jdbcType=VARCHAR},
+      </if>
+      <if test="hostdepartment != null">
+        #{hostdepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="place != null">
+        #{place,jdbcType=VARCHAR},
+      </if>
+      <if test="editor != null">
+        #{editor,jdbcType=VARCHAR},
+      </if>
+      <if test="tripstatus != null">
+        #{tripstatus,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wxplatform.pojo.DateTrip">
+    update datetrip
+    <set>
+      <if test="date != null">
+        date = #{date,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        time = #{time,jdbcType=VARCHAR},
+      </if>
+      <if test="week != null">
+        week = #{week,jdbcType=INTEGER},
+      </if>
+      <if test="xqday != null">
+        xqday = #{xqday,jdbcType=VARCHAR},
+      </if>
+      <if test="datetripcontent != null">
+        datetripcontent = #{datetripcontent,jdbcType=VARCHAR},
+      </if>
+      <if test="participants != null">
+        participants = #{participants,jdbcType=VARCHAR},
+      </if>
+      <if test="hostdepartment != null">
+        hostdepartment = #{hostdepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="place != null">
+        place = #{place,jdbcType=VARCHAR},
+      </if>
+      <if test="editor != null">
+        editor = #{editor,jdbcType=VARCHAR},
+      </if>
+      <if test="tripstatus != null">
+        tripstatus = #{tripstatus,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where datetripid = #{datetripid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wxplatform.pojo.DateTrip">
+    update datetrip
+    set date = #{date,jdbcType=VARCHAR},
+      time = #{time,jdbcType=VARCHAR},
+      week = #{week,jdbcType=INTEGER},
+      xqday = #{xqday,jdbcType=VARCHAR},
+      datetripcontent = #{datetripcontent,jdbcType=VARCHAR},
+      participants = #{participants,jdbcType=VARCHAR},
+      hostdepartment = #{hostdepartment,jdbcType=VARCHAR},
+      place = #{place,jdbcType=VARCHAR},
+      editor = #{editor,jdbcType=VARCHAR},
+      tripstatus = #{tripstatus,jdbcType=VARCHAR}
+    where datetripid = #{datetripid,jdbcType=VARCHAR}
+  </update>
+</mapper>
